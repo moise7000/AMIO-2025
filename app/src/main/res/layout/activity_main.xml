@@ -5,15 +5,130 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
+    <!-- Ligne 1 : TV1 et TV2 -->
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tv1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Service status: "
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginEnd="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/tv2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="\?\?\?"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <!-- Ligne 2 : TV3 et TV4 -->
+    <TextView
+        android:id="@+id/tv3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Last result: "
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv4"
+        app:layout_constraintTop_toBottomOf="@id/tv1"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <TextView
+        android:id="@+id/tv4"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="\?\?\?"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv2"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <!-- Ligne 3 : TV5 et TV6 -->
+    <TextView
+        android:id="@+id/tv5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Last alert: "
+        android:textSize="16sp"
+        android:padding="8dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv6"
+        app:layout_constraintTop_toBottomOf="@id/tv3"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <TextView
+        android:id="@+id/tv6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="\?\?\?"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:padding="8dp"
+        android:background="@android:drawable/edit_text"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/tv5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv4"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <!-- Ligne 4 : Boutons Toggle -->
+    <ToggleButton
+        android:id="@+id/toggleButton1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textOn="ON"
+        android:textOff="OFF"
+        android:checked="false"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/toggleButton2"
+        app:layout_constraintTop_toBottomOf="@id/tv5"
+        app:layout_constraintHorizontal_weight="1" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textOn="ON"
+        android:textOff="OFF"
+        android:checked="false"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@id/toggleButton1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv6"
+        app:layout_constraintHorizontal_weight="1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
