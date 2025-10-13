@@ -22,5 +22,7 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         Log.d("MainActivity", "[HERE] Création de l'activité");
+
+
     }
 }
