@@ -131,4 +131,15 @@
         app:layout_constraintTop_toBottomOf="@id/tv6"
         app:layout_constraintHorizontal_weight="1" />
 
+    <!-- Nouvelle CheckBox : Start at boot -->
+    <CheckBox
+        android:id="@+id/checkBoxStartAtBoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start at boot"
+        android:textSize="16sp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toggleButton1" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
