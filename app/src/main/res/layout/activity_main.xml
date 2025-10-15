@@ -1,157 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context=".MainActivity">
+    android:fillViewport="true">
 
-    <!-- Ligne 1 : TV1 et TV2 -->
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Service status: "
-        android:textSize="16sp"
-        android:padding="8dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv2"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_weight="1" />
+        android:padding="16dp"
+        tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/tv2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="\?\?\?"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:padding="8dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@id/tv1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_weight="1" />
+        <!-- Ligne 1 : Service Status -->
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Service status: "
+            android:textSize="16sp"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Ligne 2 : TV3 et TV4 -->
-    <TextView
-        android:id="@+id/tv3"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Last result: "
-        android:textSize="16sp"
-        android:padding="8dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv4"
-        app:layout_constraintTop_toBottomOf="@id/tv1"
-        app:layout_constraintHorizontal_weight="1" />
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\?\?\?"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/tv1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv1" />
 
-    <TextView
-        android:id="@+id/tv4"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="\?\?\?"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:padding="8dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@id/tv3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv2"
-        app:layout_constraintHorizontal_weight="1" />
+        <!-- Ligne 2 : Last Result (TextView scrollable) -->
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Last result:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv1" />
 
-    <!-- Ligne 3 : TV5 et TV6 -->
-    <TextView
-        android:id="@+id/tv5"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Last alert: "
-        android:textSize="16sp"
-        android:padding="8dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv6"
-        app:layout_constraintTop_toBottomOf="@id/tv3"
-        app:layout_constraintHorizontal_weight="1" />
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:maxHeight="200dp"
+            android:text="\?\?\?"
+            android:textSize="12sp"
+            android:padding="12dp"
+            android:background="@android:drawable/edit_text"
+            android:scrollbars="vertical"
+            android:textIsSelectable="true"
+            android:fontFamily="monospace"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv3" />
 
-    <TextView
-        android:id="@+id/tv6"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="\?\?\?"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:padding="8dp"
-        android:background="@android:drawable/edit_text"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@id/tv5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv4"
-        app:layout_constraintHorizontal_weight="1" />
+        <!-- Ligne 3 : Last Alert (TextView scrollable) -->
+        <TextView
+            android:id="@+id/tv5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Last alert:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv4" />
 
-    <!-- Ligne 4 : Boutons Toggle -->
-    <ToggleButton
-        android:id="@+id/toggleButton1"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textOn="ON"
-        android:textOff="OFF"
-        android:checked="false"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/toggleButton2"
-        app:layout_constraintTop_toBottomOf="@id/tv5"
-        app:layout_constraintHorizontal_weight="1" />
+        <TextView
+            android:id="@+id/tv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100dp"
+            android:maxHeight="200dp"
+            android:text="\?\?\?"
+            android:textSize="12sp"
+            android:padding="12dp"
+            android:background="@android:drawable/edit_text"
+            android:scrollbars="vertical"
+            android:textIsSelectable="true"
+            android:fontFamily="monospace"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv5" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textOn="ON"
-        android:textOff="OFF"
-        android:checked="false"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@id/toggleButton1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv6"
-        app:layout_constraintHorizontal_weight="1" />
+        <!-- Ligne 4 : Boutons Toggle -->
+        <ToggleButton
+            android:id="@+id/toggleButton1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textOn="ON"
+            android:textOff="OFF"
+            android:checked="false"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/toggleButton2"
+            app:layout_constraintTop_toBottomOf="@id/tv6"
+            app:layout_constraintHorizontal_weight="1" />
 
-    <!-- Nouveau bouton pour la requête HTTP -->
-    <Button
-        android:id="@+id/btnFetchData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Fetch Light Data"
-        android:textSize="16sp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toggleButton1" />
+        <ToggleButton
+            android:id="@+id/toggleButton2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textOn="ON"
+            android:textOff="OFF"
+            android:checked="false"
+            android:layout_marginTop="24dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/toggleButton1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv6"
+            app:layout_constraintHorizontal_weight="1" />
 
-    <!-- CheckBox : Start at boot -->
-    <CheckBox
-        android:id="@+id/checkBoxStartAtBoot"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Start at boot"
-        android:textSize="16sp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnFetchData" />
+        <!-- Bouton pour la requête HTTP -->
+        <Button
+            android:id="@+id/btnFetchData"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="FETCH LIGHT DATA"
+            android:textSize="14sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toggleButton1" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- CheckBox : Start at boot -->
+        <CheckBox
+            android:id="@+id/checkBoxStartAtBoot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start at boot"
+            android:textSize="16sp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnFetchData"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
