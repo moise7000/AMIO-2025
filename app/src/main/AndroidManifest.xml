@@ -4,6 +4,8 @@
 
     <!-- Permission pour recevoir le broadcast BOOT_COMPLETED -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
 
     <application
         android:allowBackup="true"
@@ -14,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetAMIO">
+
 
         <activity
             android:name=".MainActivity"
