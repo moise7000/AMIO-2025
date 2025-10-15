@@ -32,8 +32,6 @@ public class MainService extends Service {
                 @Override
                 public void run() {
                     Log.d(TAG, "TimerTask exécutée — toutes les 30 secondes");
-                    // 👉 Ton traitement périodique ici
-                    // Si tu veux répéter, tu peux relancer ici un nouveau schedule
                     scheduleNextRun();
                 }
             };
