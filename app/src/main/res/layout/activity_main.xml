@@ -131,7 +131,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv6"
         app:layout_constraintHorizontal_weight="1" />
 
-    <!-- Nouvelle CheckBox : Start at boot -->
+    <!-- CheckBox : Start at boot -->
     <CheckBox
         android:id="@+id/checkBoxStartAtBoot"
         android:layout_width="wrap_content"
@@ -142,4 +142,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toggleButton1" />
 
+    <!-- TextView pour afficher les données des capteurs -->
+    <TextView
+        android:id="@+id/tvSensorData"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="14sp"
+        android:text="En attente de données..."
+        android:background="@android:drawable/edit_text"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBoxStartAtBoot" />
+
+    <Button
+        android:id="@+id/btnSettings"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="⚙️ PARAMÈTRES"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvSensorData"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Catégorie Email -->
+    <PreferenceCategory android:title="Configuration Email">
+
+        <EditTextPreference
+            android:key="email_address"
+            android:title="Adresse Email"
+            android:summary="Email pour les alertes"
+            android:defaultValue="votre.email@example.com"
+            android:inputType="textEmailAddress" />
+
+    </PreferenceCategory>
+
+    <!-- Catégorie Horaires Semaine -->
+    <PreferenceCategory android:title="Alertes Email - Semaine">
+
+        <EditTextPreference
+            android:key="weekday_start_hour"
+            android:title="Heure de début (semaine)"
+            android:summary="Entre 0 et 23"
+            android:defaultValue="23"
+            android:inputType="number" />
+
+        <EditTextPreference
+            android:key="weekday_end_hour"
+            android:title="Heure de fin (semaine)"
+            android:summary="Entre 0 et 23"
+            android:defaultValue="6"
+            android:inputType="number" />
+
+        <CheckBoxPreference
+            android:key="email_enabled_weekday"
+            android:title="Activer email en semaine"
+            android:summary="Email entre 23h et 6h"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <!-- Catégorie Horaires Week-end -->
+    <PreferenceCategory android:title="Alertes Email - Week-end">
+
+        <EditTextPreference
+            android:key="weekend_start_hour"
+            android:title="Heure de début (week-end)"
+            android:summary="Entre 0 et 23"
+            android:defaultValue="19"
+            android:inputType="number" />
+
+        <EditTextPreference
+            android:key="weekend_end_hour"
+            android:title="Heure de fin (week-end)"
+            android:summary="Entre 0 et 23"
+            android:defaultValue="23"
+            android:inputType="number" />
+
+        <CheckBoxPreference
+            android:key="email_enabled_weekend"
+            android:title="Activer email le week-end"
+            android:summary="Email entre 19h et 23h"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <!-- Catégorie Seuil de détection -->
+    <PreferenceCategory android:title="Détection">
+
+        <EditTextPreference
+            android:key="luminosity_threshold"
+            android:title="Seuil de luminosité"
+            android:summary="Valeur en lux (défaut: 300)"
+            android:defaultValue="300"
+            android:inputType="number" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
