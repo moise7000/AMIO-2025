@@ -146,14 +146,16 @@
     <TextView
         android:id="@+id/tvSensorData"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:padding="16dp"
         android:textSize="14sp"
         android:text="En attente de données..."
         android:background="@android:drawable/edit_text"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:scrollbars="vertical"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnSettings"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/checkBoxStartAtBoot" />
 
     <Button
@@ -166,6 +168,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvSensorData"
-        app:layout_constraintVertical_bias="1.0" />
+         />
 </androidx.constraintlayout.widget.ConstraintLayout>

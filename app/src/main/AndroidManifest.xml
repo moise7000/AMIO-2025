@@ -4,6 +4,7 @@
     <!-- Permission pour recevoir le broadcast BOOT_COMPLETED -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,7 +14,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.ProjetAMIO">
+        android:theme="@style/Theme.ProjetAMIO"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".SettingsActivity"
             android:exported="false"
