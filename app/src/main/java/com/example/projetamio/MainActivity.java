@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,6 +29,7 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private static final String PREFS_NAME = "AppPreferences";
     private static final String KEY_START_AT_BOOT = "start_at_boot";
+    private static final int LIGHT_THRESHOLD = 250;
 
     private TextView tv2;
     private ToggleButton toggleButton1;
@@ -37,8 +40,15 @@ public class MainActivity extends Activity {
     private TextView lightValueTextView;
     private TextView motesDataTextView;
 
+    private final Map<String, MoteData> motes = new HashMap<>();
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
     private final Handler handler = new Handler(Looper.getMainLooper());
+
+    private static class MoteData {
+        String value;
+        String timestamp;
+        boolean lightOn;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +112,6 @@ public class MainActivity extends Activity {
                     InputStreamReader responseBodyReader = new InputStreamReader(responseBody, "UTF-8");
                     JsonReader jsonReader = new JsonReader(responseBodyReader);
 
-                    StringBuilder motesData = new StringBuilder();
                     String lastValue = "N/A";
                     String lastTimestamp = "N/A";
 
@@ -114,25 +123,31 @@ public class MainActivity extends Activity {
                             while (jsonReader.hasNext()) {
                                 jsonReader.beginObject(); // Start mote object
                                 String moteId = "";
-                                String value = "";
-                                String timestamp = "";
+                                MoteData moteData = new MoteData();
                                 while(jsonReader.hasNext()){
                                     String key = jsonReader.nextName();
                                     if(key.equals("mote")){
                                         moteId = jsonReader.nextString();
                                     } else if (key.equals("value")){
-                                        value = jsonReader.nextString();
+                                        moteData.value = jsonReader.nextString();
                                     } else if(key.equals("timestamp")){
-                                        timestamp = jsonReader.nextString();
+                                        moteData.timestamp = jsonReader.nextString();
                                     } else {
                                         jsonReader.skipValue();
                                     }
                                 }
-                                motesData.append("Mote: ").append(moteId).append("\n");
-                                motesData.append("Value: ").append(value).append("\n");
-                                motesData.append("Timestamp: ").append(timestamp).append("\n\n");
-                                lastValue = value;
-                                lastTimestamp = timestamp;
+
+                                try {
+                                    float lightValue = Float.parseFloat(moteData.value);
+                                    moteData.lightOn = lightValue > LIGHT_THRESHOLD;
+                                } catch (NumberFormatException e) {
+                                    Log.e(TAG, "Could not parse light value", e);
+                                    moteData.lightOn = false;
+                                }
+
+                                motes.put(moteId, moteData);
+                                lastValue = moteData.value;
+                                lastTimestamp = moteData.timestamp;
                                 jsonReader.endObject(); // End mote object
                             }
                             jsonReader.endArray(); // End "data" array
@@ -144,13 +159,7 @@ public class MainActivity extends Activity {
 
                     final String finalLastValue = lastValue;
                     final String finalLastTimestamp = lastTimestamp;
-                    final String finalMotesData = motesData.toString();
-
-                    handler.post(() -> {
-                        Log.d(TAG, "Updating UI with fetched data.");
-                        lightValueTextView.setText("Light Value: " + finalLastValue + " at " + finalLastTimestamp);
-                        motesDataTextView.setText(finalMotesData);
-                    });
+                    updateUi();
 
                 } else {
                     Log.e(TAG, "Request failed. Response code: " + responseCode);
@@ -164,6 +173,31 @@ public class MainActivity extends Activity {
                     Toast.makeText(MainActivity.this, "Error fetching data", Toast.LENGTH_SHORT).show();
                 });
             }
+        });
+    }
+
+    private void updateUi() {
+        handler.post(() -> {
+            Log.d(TAG, "Updating UI with fetched data.");
+            StringBuilder motesDisplayText = new StringBuilder();
+            String lastValue = "N/A";
+            String lastTimestamp = "N/A";
+
+            for (Map.Entry<String, MoteData> entry : motes.entrySet()) {
+                MoteData data = entry.getValue();
+                motesDisplayText.append("Mote: ").append(entry.getKey()).append(" - ");
+                if (data.lightOn) {
+                    motesDisplayText.append("Lumière ALLUMÉE");
+                } else {
+                    motesDisplayText.append("Lumière éteinte");
+                }
+                motesDisplayText.append(" (valeur: ").append(data.value).append(")\n");
+                lastValue = data.value;
+                lastTimestamp = data.timestamp;
+            }
+
+            lightValueTextView.setText("Light Value: " + lastValue + " at " + lastTimestamp);
+            motesDataTextView.setText(motesDisplayText.toString());
         });
     }
 
