@@ -103,12 +103,7 @@ public class MainActivity extends AppCompatActivity {
         };
         registerReceiver(updateUIReciver, filter, RECEIVER_EXPORTED);
 
-        Button btnTempSettings = findViewById(R.id.btn_temp_settings);
-        btnTempSettings.setOnClickListener(v -> {
-            // Lancement explicite de l'activité des paramètres
-            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        });
+        
     }
 
     @Override
