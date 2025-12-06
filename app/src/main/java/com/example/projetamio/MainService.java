@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.JsonReader;
 import android.util.Log;
 
@@ -34,11 +36,13 @@ public class MainService extends Service {
     public static final String EXTRA_DATA = "extra_data";
 
     private final Map<String, Boolean> previousMoteStates = new HashMap<>();
+    private Vibrator vibrator;
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         Log.d(TAG, "onCreate() du service");
     }
 
@@ -115,6 +119,7 @@ public class MainService extends Service {
             Boolean previousState = previousMoteStates.get(moteId);
             if (previousState != null && previousState != isLightOn) {
                 Log.d(TAG, "State change detected for mote " + moteId);
+                vibrate();
                 if (isTimeForNotification()) {
                     sendNotification(moteId, isLightOn);
                 }
@@ -123,6 +128,18 @@ public class MainService extends Service {
             previousMoteStates.put(moteId, isLightOn);
         } catch (NumberFormatException e) {
             Log.e(TAG, "Could not parse light value", e);
+        }
+    }
+
+    private void vibrate() {
+        if (vibrator.hasVibrator()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+            } else {
+                // Deprecated in API 26
+                vibrator.vibrate(500);
+            }
+            Log.d(TAG, "Vibrating for 500ms");
         }
     }
 

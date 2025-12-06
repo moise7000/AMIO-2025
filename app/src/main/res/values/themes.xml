@@ -3,7 +3,12 @@
     <style name="Base.Theme.ProjetAMIO" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="preferenceTheme">@style/AppPreferenceTheme</item>
     </style>
 
     <style name="Theme.ProjetAMIO" parent="Base.Theme.ProjetAMIO" />
+
+    <!-- Base preference theme -->
+    <style name="AppPreferenceTheme" parent="PreferenceThemeOverlay.v14.Material" />
+
 </resources>
