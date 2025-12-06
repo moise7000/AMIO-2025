@@ -3,7 +3,9 @@ package com.example.projetamio;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.JsonReader;
@@ -20,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import android.content.Context;
 
 public class MainService extends Service {
 
@@ -117,6 +118,7 @@ public class MainService extends Service {
                 if (isTimeForNotification()) {
                     sendNotification(moteId, isLightOn);
                 }
+                sendEmail(moteId, isLightOn);
             }
             previousMoteStates.put(moteId, isLightOn);
         } catch (NumberFormatException e) {
@@ -142,7 +144,27 @@ public class MainService extends Service {
 
         notificationManager.notify(moteId.hashCode(), builder.build());
         Log.d(TAG, "Notification sent for mote " + moteId);
+    }
 
+    private void sendEmail(String moteId, boolean isLightOn) {
+        Log.d(TAG, "Creating email intent for mote " + moteId);
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"destinataire@example.com"});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Changement d'état pour le mote " + moteId);
+        String body = "La lumière pour le mote " + moteId + " est maintenant " + (isLightOn ? "allumée." : "éteinte.");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, body);
+
+        // Required to start an activity from a service
+        emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            Log.d(TAG, "Email intent chooser started.");
+        } catch (android.content.ActivityNotFoundException ex) {
+            Log.e(TAG, "No email clients installed.");
+        }
     }
 
     private void createNotificationChannel() {
