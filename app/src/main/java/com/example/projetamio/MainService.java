@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
@@ -14,6 +15,7 @@ import android.util.JsonReader;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -117,17 +119,65 @@ public class MainService extends Service {
             boolean isLightOn = lightValue > LIGHT_THRESHOLD;
 
             Boolean previousState = previousMoteStates.get(moteId);
-            if (previousState != null && previousState != isLightOn) {
-                Log.d(TAG, "State change detected for mote " + moteId);
+
+            // TP3: On détecte une "nouvelle lumière qui vient d'être allumée" (FALSE -> TRUE)
+            if (previousState != null && !previousState && isLightOn) {
+                Log.d(TAG, "State change detected (OFF->ON) for mote " + moteId);
+
+                // TP3 Exercice 3: Action matériel (Vibreur)
                 vibrate();
-                if (isTimeForNotification()) {
-                    sendNotification(moteId, isLightOn);
-                }
-                sendEmail(moteId, isLightOn);
+
+                // TP3: Logique conditionnelle pour Email vs Notification
+                checkConditionsAndAlert(moteId, isLightOn);
             }
             previousMoteStates.put(moteId, isLightOn);
         } catch (NumberFormatException e) {
             Log.e(TAG, "Could not parse light value", e);
+        }
+    }
+
+    private void checkConditionsAndAlert(String moteId, boolean isLightOn) {
+        // 1. Récupération des préférences (TP3 Exercice 2)
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String emailDest = prefs.getString("pref_email_dest", "destinataire@example.com");
+
+        // Valeurs par défaut selon l'énoncé si non configuré
+        int startHour = 19;
+        int endHour = 23;
+        try {
+            startHour = Integer.parseInt(prefs.getString("pref_hour_start", "19"));
+            endHour = Integer.parseInt(prefs.getString("pref_hour_end", "23"));
+        } catch (NumberFormatException e) {
+            Log.e(TAG, "Erreur parsing heures préférences", e);
+        }
+
+        // 2. Vérification Temporelle (Calendar)
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK); // 1=Dimanche, 7=Samedi
+
+        boolean isWeekend = (dayOfWeek == Calendar.SATURDAY || dayOfWeek == Calendar.SUNDAY);
+
+        // Plage "Soirée" (ex: 19h-23h)
+        boolean isEveningRange = (hour >= startHour && hour < endHour);
+
+        // Plage "Nuit" (ex: 23h-06h) - NB: énoncé TP3 dit "semaine entre 23h et 6h"
+        boolean isNightRange = (hour >= endHour || hour < 6);
+
+        // 3. Application des règles du TP3
+
+        // Règle 1: Notification -> Semaine entre 19h et 23h
+        if (!isWeekend && isEveningRange) {
+            Log.d(TAG, "Condition Notification remplie (Semaine soirée)");
+            sendNotification(moteId, isLightOn);
+        }
+
+        // Règle 2: Email -> Week-end (19h-23h) OU Semaine (23h-06h)
+        else if ((isWeekend && isEveningRange) || (!isWeekend && isNightRange)) {
+            Log.d(TAG, "Condition Email remplie (WE ou Nuit semaine)");
+            sendEmail(moteId, isLightOn, emailDest);
+        } else {
+            Log.d(TAG, "Aucune condition d'alerte remplie pour ce changement.");
         }
     }
 
@@ -136,48 +186,46 @@ public class MainService extends Service {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
             } else {
-                // Deprecated in API 26
                 vibrator.vibrate(500);
             }
             Log.d(TAG, "Vibrating for 500ms");
         }
     }
 
-    private boolean isTimeForNotification() {
-        Calendar cal = Calendar.getInstance();
-        int hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
-        return hourOfDay >= 18 && hourOfDay < 23;
-    }
-
     private void sendNotification(String moteId, boolean isLightOn) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        String notificationText = "Lumière " + (isLightOn ? "allumée" : "éteinte") + " pour le mote " + moteId;
+        String notificationText = "Lumière ALLUMÉE détectée sur le mote " + moteId;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // Remplacez par votre icône
-                .setContentTitle("Changement d'état de la lumière")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Alerte Lumière")
                 .setContentText(notificationText)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
 
         notificationManager.notify(moteId.hashCode(), builder.build());
         Log.d(TAG, "Notification sent for mote " + moteId);
     }
 
-    private void sendEmail(String moteId, boolean isLightOn) {
-        Log.d(TAG, "Creating email intent for mote " + moteId);
+    private void sendEmail(String moteId, boolean isLightOn, String emailDest) {
+        Log.d(TAG, "Creating email intent for " + emailDest);
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        // Configuration spécifique pour les clients mail
         emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"destinataire@example.com"});
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Changement d'état pour le mote " + moteId);
-        String body = "La lumière pour le mote " + moteId + " est maintenant " + (isLightOn ? "allumée." : "éteinte.");
+        emailIntent.setType("text/plain"); // ou "message/rfc822"
+
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{emailDest});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Alerte: Changement d'état mote " + moteId);
+        String body = "La lumière pour le mote " + moteId + " vient d'être allumée (Détection hors horaires ouvrés).";
         emailIntent.putExtra(Intent.EXTRA_TEXT, body);
 
-        // Required to start an activity from a service
         emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            // Utilisation du chooser pour laisser le choix à l'utilisateur (TP3 Exercice 1)
+            Intent chooserIntent = Intent.createChooser(emailIntent, "Envoyer alerte email...");
+            chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(chooserIntent);
             Log.d(TAG, "Email intent chooser started.");
         } catch (android.content.ActivityNotFoundException ex) {
             Log.e(TAG, "No email clients installed.");

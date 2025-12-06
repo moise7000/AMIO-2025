@@ -1,15 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <EditTextPreference
-        app:key="username"
-        app:summary="Please provide your username"
-        app:title="Your Name" />
+    <PreferenceCategory app:title="Général">
+        <EditTextPreference
+            app:key="username"
+            app:summary="Please provide your username"
+            app:title="Your Name" />
 
-    <SwitchPreferenceCompat
-        app:defaultValue="false"
-        app:key="dark_mode"
-        app:summary="Enable or disable dark mode"
-        app:title="Dark Mode" />
+        <SwitchPreferenceCompat
+            app:defaultValue="false"
+            app:key="dark_mode"
+            app:summary="Enable or disable dark mode"
+            app:title="Dark Mode" />
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="Configuration Alertes (TP3)">
+        <EditTextPreference
+            app:key="pref_email_dest"
+            app:title="Email destinataire"
+            app:defaultValue="votre.email@example.com"
+            android:inputType="textEmailAddress"
+            app:summary="Adresse pour recevoir les alertes" />
+
+        <EditTextPreference
+            app:key="pref_hour_start"
+            app:title="Heure début (soir)"
+            app:defaultValue="19"
+            android:inputType="number"
+            app:summary="Heure de début de surveillance (ex: 19)" />
+
+        <EditTextPreference
+            app:key="pref_hour_end"
+            app:title="Heure fin (soir)"
+            app:defaultValue="23"
+            android:inputType="number"
+            app:summary="Heure de fin de surveillance (ex: 23)" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

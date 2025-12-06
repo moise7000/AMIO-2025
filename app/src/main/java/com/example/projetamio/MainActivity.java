@@ -1,4 +1,3 @@
-
 package com.example.projetamio;
 
 import android.content.BroadcastReceiver;
@@ -7,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox checkBoxStartAtBoot;
     private SharedPreferences sharedPreferences;
 
-    private Button fetchDataButton; // This button will now be unused
+    private Button fetchDataButton;
     private TextView lightValueTextView;
     private TextView motesDataTextView;
 
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "État de la checkbox 'Start at boot' changé: " + isChecked);
         });
 
-        // The button is no longer needed to fetch data, it is done by the service
         fetchDataButton.setEnabled(false);
 
         IntentFilter filter = new IntentFilter(MainService.ACTION_UPDATE_UI);
@@ -103,6 +102,13 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         registerReceiver(updateUIReciver, filter, RECEIVER_EXPORTED);
+
+        Button btnTempSettings = findViewById(R.id.btn_temp_settings);
+        btnTempSettings.setOnClickListener(v -> {
+            // Lancement explicite de l'activité des paramètres
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+        });
     }
 
     @Override
@@ -146,18 +152,24 @@ public class MainActivity extends AppCompatActivity {
 
         for (Map.Entry<String, MoteData> entry : motes.entrySet()) {
             MoteData data = entry.getValue();
-            motesDisplayText.append("Mote: ").append(entry.getKey()).append(" - ");
+
+            // Formatage HTML pour mise en évidence
+            motesDisplayText.append("<b>Mote: ").append(entry.getKey()).append("</b><br/>");
+
             if (data.lightOn) {
-                motesDisplayText.append("Lumière ALLUMÉE");
+                // ROUGE et GRAS pour les lumières allumées (Mise en évidence TP3)
+                motesDisplayText.append("<font color='red'><b>LUMIÈRE ALLUMÉE</b></font>");
             } else {
-                motesDisplayText.append("Lumière éteinte");
+                motesDisplayText.append("<font color='#666666'>Lumière éteinte</font>");
             }
-            motesDisplayText.append(" (valeur: ").append(data.value).append(")\n");
+            motesDisplayText.append(" (valeur: ").append(data.value).append(")<br/><br/>");
             lastValue = data.value;
         }
 
-        lightValueTextView.setText("Light Value: " + lastValue);
-        motesDataTextView.setText(motesDisplayText.toString());
+        lightValueTextView.setText("Dernière valeur brute: " + lastValue);
+
+        // Interprétation du HTML
+        motesDataTextView.setText(Html.fromHtml(motesDisplayText.toString(), Html.FROM_HTML_MODE_COMPACT));
     }
 
     @Override
