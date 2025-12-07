@@ -28,6 +28,7 @@
             app:title="Heure début (soir)"
             app:defaultValue="19"
             android:inputType="number"
+            app:useSimpleSummaryProvider="true"
             app:summary="Heure de début de surveillance (ex: 19)" />
 
         <EditTextPreference
@@ -35,6 +36,7 @@
             app:title="Heure fin (soir)"
             app:defaultValue="23"
             android:inputType="number"
+            app:useSimpleSummaryProvider="true"
             app:summary="Heure de fin de surveillance (ex: 23)" />
     </PreferenceCategory>
 

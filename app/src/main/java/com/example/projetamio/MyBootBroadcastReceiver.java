@@ -6,11 +6,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+/**
+ * BroadcastReceiver écoutant l'événement de démarrage du système (BOOT_COMPLETED).
+ * Démarre automatiquement MainService si l'option est activée dans les préférences.
+ */
 public class MyBootBroadcastReceiver extends BroadcastReceiver {
     private static final String TAG = "BootBroadcastReceiver";
     private static final String PREFS_NAME = "AppPreferences";
     private static final String KEY_START_AT_BOOT = "start_at_boot";
 
+    /**
+     * Méthode appelée lors de la réception du broadcast.
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction() != null &&

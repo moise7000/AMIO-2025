@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -17,7 +18,6 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="16dp"
@@ -26,7 +26,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
-        <!-- Ligne 1 : TV1 et TV2 -->
         <TextView
             android:id="@+id/tv1"
             android:layout_width="0dp"
@@ -48,7 +47,7 @@
             android:layout_marginStart="8dp"
             android:background="@android:drawable/edit_text"
             android:padding="8dp"
-            android:text="\?\?\?"
+            android:text="..."
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +55,6 @@
             app:layout_constraintStart_toEndOf="@id/tv1"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Ligne 2 : TV3 et TV4 -->
         <TextView
             android:id="@+id/tv3"
             android:layout_width="0dp"
@@ -80,7 +78,7 @@
             android:layout_marginTop="16dp"
             android:background="@android:drawable/edit_text"
             android:padding="8dp"
-            android:text="\?\?\?"
+            android:text="..."
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,7 +86,6 @@
             app:layout_constraintStart_toEndOf="@id/tv3"
             app:layout_constraintTop_toBottomOf="@id/tv2" />
 
-        <!-- Ligne 3 : TV5 et TV6 -->
         <TextView
             android:id="@+id/tv5"
             android:layout_width="0dp"
@@ -112,7 +109,7 @@
             android:layout_marginTop="16dp"
             android:background="@android:drawable/edit_text"
             android:padding="8dp"
-            android:text="\?\?\?"
+            android:text="..."
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -120,16 +117,15 @@
             app:layout_constraintStart_toEndOf="@id/tv5"
             app:layout_constraintTop_toBottomOf="@id/tv4" />
 
-        <!-- Ligne 4 : Boutons Toggle -->
         <ToggleButton
             android:id="@+id/toggleButton1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:checked="false"
-            android:textOff="OFF"
-            android:textOn="ON"
+            android:textOff="Service OFF"
+            android:textOn="Service ON"
             app:layout_constraintEnd_toStartOf="@id/toggleButton2"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +136,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:checked="false"
             android:textOff="OFF"
             android:textOn="ON"
@@ -149,12 +145,11 @@
             app:layout_constraintStart_toEndOf="@id/toggleButton1"
             app:layout_constraintTop_toBottomOf="@id/tv6" />
 
-        <!-- Nouvelle CheckBox : Start at boot -->
         <CheckBox
             android:id="@+id/checkBoxStartAtBoot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="Start at boot"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -164,8 +159,8 @@
             android:id="@+id/fetchDataButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Fetch Data"
+            android:layout_marginTop="8dp"
+            android:text="Fetch Data Manually"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/checkBoxStartAtBoot" />
 
@@ -174,7 +169,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Light Value: "
+            android:text="Info: "
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/fetchDataButton" />
@@ -182,7 +177,7 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -191,10 +186,9 @@
             <TextView
                 android:id="@+id/motesDataTextView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp"/>
         </ScrollView>
-
-        
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

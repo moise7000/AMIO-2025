@@ -5,6 +5,10 @@ import android.content.SharedPreferences;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
+/**
+ * Classe Application globale.
+ * Initialisée avant toute activité pour configurer le thème (Jour/Nuit) dès le démarrage.
+ */
 public class MyApplication extends Application {
 
     @Override

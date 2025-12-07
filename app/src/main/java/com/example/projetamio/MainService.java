@@ -27,6 +27,14 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * Service principal de l'application (MainService).
+ * <p>
+ * Ce service tourne en arrière-plan pour :
+ * 1. Récupérer périodiquement les données des capteurs via HTTP.
+ * 2. Analyser les seuils de luminosité.
+ * 3. Déclencher des alertes (Vibration, Notification, Email) selon des règles horaires complexes.
+ */
 public class MainService extends Service {
 
     private static final String TAG = "MainService";
@@ -40,6 +48,10 @@ public class MainService extends Service {
     private final Map<String, Boolean> previousMoteStates = new HashMap<>();
     private Vibrator vibrator;
 
+    /**
+     * Méthode du cycle de vie appelée à la création du service.
+     * Initialise le canal de notification (requis pour Android O+) et récupère le service de vibration.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
@@ -48,6 +60,15 @@ public class MainService extends Service {
         Log.d(TAG, "onCreate() du service");
     }
 
+    /**
+     * Appelée chaque fois que le service est démarré via startService.
+     * Lance le Timer qui exécutera fetchData() toutes les 30 secondes.
+     *
+     * @param intent  L'intention fournie à startService.
+     * @param flags   Données supplémentaires sur le type de démarrage.
+     * @param startId Un ID unique pour cette demande de démarrage spécifique.
+     * @return START_STICKY pour que le système redémarre le service s'il est tué par manque de mémoire.
+     */
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d(TAG, "onStartCommand() - démarrage du timer");
@@ -63,6 +84,12 @@ public class MainService extends Service {
         return START_STICKY;
     }
 
+    /**
+     * Effectue la requête réseau vers le webservice IoT Lab.
+     * <p>
+     * Cette méthode ouvre une connexion HTTP, lit le flux JSON, parse les données
+     * pour extraire les paires mote/value, et délègue le traitement à processMoteData.
+     */
     private void fetchData() {
         Log.d(TAG, "Fetching data from webservice");
         try {
@@ -113,6 +140,14 @@ public class MainService extends Service {
         }
     }
 
+    /**
+     * Traite les données d'un capteur spécifique pour détecter les changements d'état.
+     * <p>
+     * Détecte spécifiquement un front montant (OFF -> ON) basé sur le seuil LIGHT_THRESHOLD.
+     *
+     * @param moteId Identifiant du capteur (mote).
+     * @param value  Valeur de luminosité brute (String).
+     */
     private void processMoteData(String moteId, String value) {
         try {
             float lightValue = Float.parseFloat(value);
@@ -136,6 +171,16 @@ public class MainService extends Service {
         }
     }
 
+    /**
+     * Applique la logique métier (Règles TP3) pour décider du type d'alerte.
+     * <p>
+     * Règles :
+     * - Notification : Semaine, en soirée (ex: 19h-23h).
+     * - Email : Week-end (soirée) OU Nuit en semaine (23h-06h).
+     *
+     * @param moteId    L'identifiant du mote concerné.
+     * @param isLightOn L'état actuel de la lumière (true si allumée).
+     */
     private void checkConditionsAndAlert(String moteId, boolean isLightOn) {
         // 1. Récupération des préférences (TP3 Exercice 2)
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -181,6 +226,10 @@ public class MainService extends Service {
         }
     }
 
+    /**
+     * Active le vibreur du téléphone pendant 500ms.
+     * Compatible avec les API modernes (Oreo+) et anciennes.
+     */
     private void vibrate() {
         if (vibrator.hasVibrator()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -192,6 +241,9 @@ public class MainService extends Service {
         }
     }
 
+    /**
+     * Envoie une notification système dans la barre d'état.
+     */
     private void sendNotification(String moteId, boolean isLightOn) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String notificationText = "Lumière ALLUMÉE détectée sur le mote " + moteId;
@@ -207,6 +259,13 @@ public class MainService extends Service {
         Log.d(TAG, "Notification sent for mote " + moteId);
     }
 
+    /**
+     * Prépare et lance un Intent pour envoyer un email via une application tierce.
+     *
+     * @param moteId    L'identifiant du mote.
+     * @param isLightOn État de la lumière.
+     * @param emailDest L'adresse email du destinataire.
+     */
     private void sendEmail(String moteId, boolean isLightOn, String emailDest) {
         Log.d(TAG, "Creating email intent for " + emailDest);
         Intent emailIntent = new Intent(Intent.ACTION_SEND);
@@ -232,6 +291,9 @@ public class MainService extends Service {
         }
     }
 
+    /**
+     * Crée le canal de notification (obligatoire pour Android 8.0+).
+     */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Mote State Change Channel";
@@ -244,12 +306,20 @@ public class MainService extends Service {
         }
     }
 
+    /**
+     * Envoie les données mises à jour à l'interface utilisateur via un Broadcast.
+     *
+     * @param motesData Map contenant les ID des motes et leurs valeurs.
+     */
     private void broadcastUpdate(Map<String, String> motesData) {
         Intent intent = new Intent(ACTION_UPDATE_UI);
         intent.putExtra(EXTRA_DATA, new HashMap<>(motesData));
         sendBroadcast(intent);
     }
 
+    /**
+     * Nettoyage à l'arrêt du service : arrêt du Timer.
+     */
     @Override
     public void onDestroy() {
         Log.d(TAG, "onDestroy() - arrêt du timer");
